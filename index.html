@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chat WebSocket + Notificaciones</title>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+  <h2>Chat WebSocket</h2>
+
+  <h3>🔔 Notificaciones:</h3>
+  <ul id="notifications" style="border: 1px solid #ccc; padding: 10px;"></ul>
+  <button id="markReadBtn">Marcar todas como leídas</button>
+
+  <hr>
+
+  <div id="messages" style="border:1px solid #ccc; height: 200px; overflow-y: auto; padding: 10px;"></div>
+
+  <input id="inputMsg" type="text" placeholder="Escribe tu mensaje..." />
+  <button id="sendBtn">Enviar</button>
+
+  <script>
+    const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vY2NlcnBiYWNrLnRlc3QvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE3NDkyMzc3NTUsImV4cCI6MTc0OTIzOTE5NSwibmJmIjoxNzQ5MjM3NzU1LCJqdGkiOiJ6QzVtbklIMmpVU3lxbHlNIiwic3ViIjoiMSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.0zng1o34dZ5W4_5rZttf0KooC4gwnhGIzTismScoF2g';
+    const socket = io("http://ccerpBack.test:3001", {
+      auth: { token: token }
+    });
+
+    const messagesDiv = document.getElementById("messages");
+    const inputMsg = document.getElementById("inputMsg");
+    const sendBtn = document.getElementById("sendBtn");
+    const notificationsList = document.getElementById("notifications");
+    const markReadBtn = document.getElementById("markReadBtn");
+
+    let unreadNotificationIds = [];
+
+    socket.on("connect", () => {
+      console.log("✅ Conectado al WebSocket");
+      addMessage("Sistema", "Conectado al servidor.");
+    });
+
+    socket.on("chat:message", (data) => {
+      addMessage(data.user, data.message);
+    });
+
+    // 🔔 Recibir notificaciones no leídas
+    socket.on("notification", (data) => {
+      console.log("📨 Notificación recibida:", data);
+      showNotification(data);
+    });
+
+    // 🎯 Marcar todas como leídas
+    markReadBtn.addEventListener("click", () => {
+      if (unreadNotificationIds.length === 0) {
+        alert("No hay notificaciones pendientes.");
+        return;
+      }
+
+      socket.emit("notifications:markAsRead", unreadNotificationIds);
+      notificationsList.innerHTML = "";
+      unreadNotificationIds = [];
+    });
+
+    function showNotification(notification) {
+      const li = document.createElement("li");
+      li.textContent = notification.data.message || "(sin contenido)";
+      notificationsList.appendChild(li);
+      unreadNotificationIds.push(notification.id);
+    }
+
+    function addMessage(user, message) {
+      const msgElem = document.createElement("div");
+      msgElem.textContent = `${user}: ${message}`;
+      messagesDiv.appendChild(msgElem);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    sendBtn.addEventListener("click", () => {
+      const msg = inputMsg.value.trim();
+      if (msg) {
+        socket.emit("chat:message", msg);
+        inputMsg.value = "";
+      }
+    });
+
+    inputMsg.addEventListener("keyup", (e) => {
+      if (e.key === "Enter") {
+        sendBtn.click();
+      }
+    });
+
+    socket.on("connect_error", (err) => {
+      console.error("Error de conexión:", err.message);
+      addMessage("Sistema", `Error: ${err.message}`);
+    });
+
+    // Otros eventos
+    socket.on("new.notification", (data) => {
+      addMessage("System", data.message);
+    });
+
+    socket.on("files.uploaded", (data) => {
+      addMessage("System", data.message);
+    });
+
+    socket.on("status.uploaded", (data) => {
+      addMessage("System", data.message);
+    });
+
+    socket.on("observation.uploaded", (data) => {
+      addMessage("System", data.message);
+    });
+  </script>
+</body>
+</html>

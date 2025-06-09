@@ -1,8 +1,15 @@
-version: "3.8"
+version: "3.3"
+
+networks:
+  laravel:
+    external: true
 
 services:
   redis:
     image: redis:alpine
+    networks:
+      laravel:
+        ipv4_address: 172.18.0.2
     ports:
       - "6379:6379"
 
@@ -11,8 +18,13 @@ services:
     ports:
       - "3001:3001"
     environment:
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - LARAVEL_API_URL=http://host.docker.internal
+      REDIS_HOST: 172.18.0.2          # IP interna de Redis
+      REDIS_PORT: 6379
+      LARAVEL_API_URL: http://172.18.0.3   # IP interna de Laravel
+      CORS_ORIGIN: http://127.0.0.1:5500  # tu frontend permitido
+      PORT: 3001
     depends_on:
       - redis
+    networks:
+      laravel:
+        ipv4_address: 172.18.0.4   # puedes asignar IP fija al websocket (opcional)

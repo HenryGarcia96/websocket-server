@@ -5,24 +5,18 @@ networks:
     external: true
 
 services:
-  redis:
-    image: redis:alpine
-    networks:
-      - laravel
-    ports:
-      - "6379:6379"
-
   websocket:
     build: .
     ports:
       - "3001:3001"
     environment:
-      REDIS_HOST: redis-server             # nombre del servicio redis
+      REDIS_HOST: redis-server    # nombre del contenedor redis que ya tienes corriendo
       REDIS_PORT: 6379
-      LARAVEL_API_URL: http://ccerpback  # nombre del servicio laravel
+      LARAVEL_API_URL: http://172.18.0.3   # o la IP interna del contenedor laravel
       CORS_ORIGIN: http://127.0.0.1:5500
       PORT: 3001
     depends_on:
-      - redis
+      # - redis  # quita esta línea porque ya no levantas redis aquí
     networks:
-      - laravel
+      laravel:
+        ipv4_address: 172.18.0.4

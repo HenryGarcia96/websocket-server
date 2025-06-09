@@ -10,13 +10,12 @@ services:
     ports:
       - "3001:3001"
     environment:
-      REDIS_HOST: redis-server    # nombre del contenedor redis que ya tienes corriendo
+      REDIS_HOST: redis-server
       REDIS_PORT: 6379
-      LARAVEL_API_URL: http://172.18.0.3   # o la IP interna del contenedor laravel
+      LARAVEL_API_URL: http://ccerpback
       CORS_ORIGIN: http://127.0.0.1:5500
       PORT: 3001
     depends_on:
-      # - redis  # quita esta línea porque ya no levantas redis aquí
+      - redis-server  # si redis está fuera de este compose, puedes quitarlo
     networks:
-      laravel:
-        ipv4_address: 172.18.0.4
+      - laravel

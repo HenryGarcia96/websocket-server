@@ -15,7 +15,5 @@ services:
       LARAVEL_API_URL: http://ccerpback
       CORS_ORIGIN: http://127.0.0.1:5500
       PORT: 3001
-    depends_on:
-      - redis-server  # si redis está fuera de este compose, puedes quitarlo
     networks:
       - laravel

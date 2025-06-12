@@ -3,9 +3,13 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 const Redis = require("ioredis");
 const axios = require("axios");
+const express = require('express');
+const app = express();
+
+app.get('/', (req, res) => res.send('✅ Servidor Socket.IO activo.'));
 
 // Crear servidor HTTP
-const httpServer = createServer();
+const httpServer = createServer(app);
 
 // Configurar Socket.IO con CORS
 const io = new Server(httpServer, {

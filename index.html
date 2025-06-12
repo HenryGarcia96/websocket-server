@@ -21,8 +21,8 @@
   <button id="sendBtn">Enviar</button>
 
   <script>
-    const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMjAxLjE2My4xNS4yMDM6ODAwMS9hcGkvYXV0aC9sb2dpbiIsImlhdCI6MTc0OTc1MzI3NSwiZXhwIjoxNzQ5NzYwNDc1LCJuYmYiOjE3NDk3NTMyNzUsImp0aSI6IjczTFYyNGJaT0JaSThod1ciLCJzdWIiOiIxIiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.coi5RSxFbEE-lvbL2dksTggNhhMZOU5mzEO2Dwx8hbo';
-    const socket = io("https://1745-201-163-15-203.ngrok-free.app", {
+    const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vY2NlcnBiYWNrLnRlc3QvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE3NDkyMzc3NTUsImV4cCI6MTc0OTIzOTE5NSwibmJmIjoxNzQ5MjM3NzU1LCJqdGkiOiJ6QzVtbklIMmpVU3lxbHlNIiwic3ViIjoiMSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.0zng1o34dZ5W4_5rZttf0KooC4gwnhGIzTismScoF2g';
+    const socket = io("http://201.163.15.203:3001", {
       auth: { token: token }
     });
 

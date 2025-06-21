@@ -35,11 +35,16 @@ io.use(async (socket, next) => {
   }
 
   try {
-    const response = await axios.get(process.env.LARAVEL_API_URL + "/api/me"  || "http://localhost/api/me", {
+    const baseUrl = (process.env.LARAVEL_API_URL || "http://localhost").replace(/\/+$/, '');
+    console.log("🔍 Llamando a:", `${baseUrl}/api/me`);
+
+    const response = await axios.get(`${baseUrl}/api/me`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     });
+
+    console.log("✅ Usuario autenticado:", response.data);
 
     // Guarda los datos del usuario autenticado en el socket
     socket.user = response.data;
@@ -64,7 +69,8 @@ io.on("connection", async (socket) => {
   userSockets.set(userId, socket);
 
   // --- NUEVO: Obtener notificaciones no leídas y enviarlas ---
-  const baseUrl = process.env.LARAVEL_API_URL || "http://localhost";
+  const baseUrl = (process.env.LARAVEL_API_URL || "http://localhost").replace(/\/+$/, '');
+
   try {
     const notificationsResponse = await axios.get( `${baseUrl}/api/notifications/unread`,{
         headers: { Authorization: `Bearer ${socket.token}` }

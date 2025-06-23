@@ -12,8 +12,8 @@ services:
     environment:
       REDIS_HOST: redis-server
       REDIS_PORT: 6379
-      REDIS_PASSWORD: $Credit789Magnus
-      LARAVEL_API_URL: http://ccerpback
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      LARAVEL_API_URL: ${LARAVEL_API_URL}
       CORS_ORIGIN: http://127.0.0.1:5500
       PORT: 3001
     networks:

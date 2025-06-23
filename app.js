@@ -141,6 +141,14 @@ redis.psubscribe("ccerp_database_private-user.*", (err, count) => {
   }
 });
 
+redis.psubscribe("ccerp_database_private-auditor.*", (err, count) => {
+  if (err) {
+    console.error("❌ Error al pSuscribirse a canales de auditor:", err);
+  } else {
+    console.log(`🕵️ Suscrito a ${count} canal(es) de auditor Redis con patrón.`);
+  }
+});
+
 // Handler para mensajes normales (subscribe)
 redis.on("message", (channel, message) => {
   console.log(`📥 [message] Canal: ${channel}`);
@@ -181,7 +189,22 @@ function handleRedisMessage(channel, message) {
         console.warn(`⚠️ Canal privado con userId inválido: ${channel}`);
       }
 
-    } else {
+    } else if (channel.startsWith('ccerp_database_private-auditor.')) {
+      const auditorIdStr = channel.split('ccerp_database_private-auditor.')[1];
+      const auditorId = parseInt(auditorIdStr, 10);
+
+      if (!isNaN(auditorId)) {
+        const socket = userSockets.get(auditorId);
+        if (socket) {
+          console.log(`🕵️ Enviando evento '${event}' a auditor ID ${auditorId}`);
+          socket.emit(event, data);
+        } else {
+          console.log(`👤 Auditor ${auditorId} no conectado. Evento '${event}' ignorado.`);
+        }
+      } else {
+        console.warn(`⚠️ Canal auditor con ID inválido: ${channel}`);
+      }
+    }else {
       console.log(`⚠️ Canal no reconocido: ${channel}`);
     }
   } catch (e) {

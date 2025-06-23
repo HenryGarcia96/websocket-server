@@ -21,8 +21,8 @@
   <button id="sendBtn">Enviar</button>
 
   <script>
-    const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vY2NlcnBiYWNrLnRlc3QvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE3NTA3MDkxNzgsImV4cCI6MTc1MDcxNjM3OCwibmJmIjoxNzUwNzA5MTc4LCJqdGkiOiJuYk1OTGVnNmZkOWNkd21PIiwic3ViIjoiMSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.HvM1rzSJRK2Xb9TGJCte1gP7edvXrddKB_xPUIKJdYA';
-    const socket = io("http://ccerpback.test:3001", {
+    const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMzUuMjM2LjEyMC44ODo4MDAwL2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNzUwNzEwNzEwLCJleHAiOjE3NTA3OTcxMTAsIm5iZiI6MTc1MDcxMDcxMCwianRpIjoiN0NqaUxMYUZtMUxFbWFpSyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.byT96mBqve-EY3QiEd94n24JGlC0XjotpqZPi3';
+    const socket = io("http://35.236.120.88:3001", {
       auth: { token: token },
       transports: ["websocket"] 
     });
